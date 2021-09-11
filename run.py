@@ -52,7 +52,7 @@ def main():
         help = "Output light point radius threshold")
     ap.add_argument("-w", "--watermark", default = "spike.png",
         help = "Add water mark image")
-    ap.add_argument("-n", "--spikenum", default = 5,
+    ap.add_argument("-n", "--spikenum", type = int, default = 5,
         help = "Number of spikes")
     args = vars(ap.parse_args())
 
@@ -88,6 +88,8 @@ def main():
     for ((cX, cY), radius) in spikeList:
         scale = size_param * radius
         img_size = scale * spike.shape[1]
+        if img_size > image.shape[1] / 3:
+            continue
         image = addImageWatermark(spike, image, 100, (int(cX - img_size / 2), int(cY - img_size / 2)), scale)
 
         if nums < args["spikenum"]:
